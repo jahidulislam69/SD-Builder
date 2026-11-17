@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd978"/>
+      <stop offset="50%" stop-color="#f6c453"/>
+      <stop offset="100%" stop-color="#c89116"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e2029"/>
+      <stop offset="100%" stop-color="#0f1015"/>
+    </linearGradient>
+    <linearGradient id="patinaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ed1b8"/>
+      <stop offset="100%" stop-color="#2a9d8f"/>
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#f6c453" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Squircle Plate -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="2"/>
+
+  <!-- Subtle Sheet Grid Pattern in Background -->
+  <path d="M16 22H48M16 32H48M16 42H48" stroke="rgba(255,255,255,0.07)" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M26 18V46M38 18V46" stroke="rgba(255,255,255,0.07)" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Left: Stylized S -->
+  <path d="M26 23.5C26 21 24 19 20.5 19H17C14.5 19 13 20.5 13 22.5C13 25.5 16 26.5 21 28C26 29.5 28 31.5 28 34.5C28 37.5 25.5 39.5 22 39.5H16.5C13.5 39.5 12 37.5 12 35" 
+        stroke="url(#goldGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#goldGlow)"/>
+
+  <!-- Right: Stylized D / Report Card -->
+  <path d="M34 19V39.5M34 19H41C46.5 19 50.5 23 50.5 29.25C50.5 35.5 46.5 39.5 41 39.5H34" 
+        stroke="url(#goldGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#goldGlow)"/>
+
+  <!-- Top Right Patina QA Checkmark Accent -->
+  <circle cx="49" cy="15" r="7" fill="#0f1015" stroke="url(#patinaGrad)" stroke-width="2"/>
+  <path d="M46 15L48 17L52 13" stroke="url(#patinaGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

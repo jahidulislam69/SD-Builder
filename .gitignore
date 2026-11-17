@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# External skill toolkits and sub-repos
+superpowers/
+ponytail/
+impeccable/
+
+# Microsoft Excel temporary lock files
+~$*.xlsx
+~$*.xls
+
+# Temporary and test generated exports
+*.tmp
+test_generated.xlsx
+test-output.xlsx
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE & Editor configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

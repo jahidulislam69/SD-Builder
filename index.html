@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SD Daily Report Generator — QA Operations</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Top Header -->
+    <header>
+      <div class="brand-badge">
+        <img src="assets/logo.svg" alt="SD Report Generator Logo" class="brand-icon-svg" width="44" height="44">
+        <div class="brand-title">
+          <h1>SD Daily Report Generator</h1>
+          <div class="brand-subtitle">
+            <span>Sunday–Thursday QA Weekly Report</span>
+            <span id="saveIndicator" class="save-indicator">● Saved locally</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <input type="file" id="auditFileInput" accept=".xlsx,.xls" style="display: none;">
+        <button id="btnImportAudit" class="btn btn-secondary btn-sm" title="Upload Audit.xlsx to auto-fill Voice & Non-Voice counts">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+          </svg>
+          Import Audit.xlsx
+        </button>
+        <button id="btnResetWeek" class="btn btn-ghost btn-sm" title="Reset current week to defaults">
+          Reset Week
+        </button>
+        <button id="btnExport" class="btn btn-primary">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+          </svg>
+          Download .xlsx Report
+        </button>
+      </div>
+    </header>
+
+    <!-- Profile & Week Configuration -->
+    <section class="config-bar">
+      <div class="form-group">
+        <label for="processorName">Processor Name</label>
+        <div class="name-sync-row">
+          <input type="text" id="processorName" class="form-control" list="processorNameSuggestions" placeholder="e.g. Intakhab Didar Rony">
+          <button type="button" id="btnSyncSheet" class="btn btn-secondary btn-sm" title="Fetch Complete counts from Google Sheet for this name">
+            Sync
+          </button>
+        </div>
+        <datalist id="processorNameSuggestions">
+          <option value="Intakhab Didar Rony"></option>
+          <option value="Sajjad Hossain"></option>
+          <option value="Shekh Zihad"></option>
+          <option value="Md. Mahin Arefin"></option>
+          <option value="Md. Atef Masum"></option>
+          <option value="Abir Hasan Fuad"></option>
+          <option value="Fasbir Hasan"></option>
+          <option value="Readoy Hossain"></option>
+          <option value="Kazi Nur Alam Titu"></option>
+          <option value="Tanvir Ahmad"></option>
+          <option value="Jahidul Islam Shuvo"></option>
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label for="qcBy">QC By</label>
+        <input type="text" id="qcBy" class="form-control" placeholder="e.g. Md Helal Hossain">
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">
+          Week Starting (Sunday) <span id="weekRangeBadge" class="week-range-badge"></span>
+        </label>
+        <div class="date-stepper">
+          <button id="btnPrevWeek" class="btn btn-secondary btn-sm" title="Previous Week">&larr;</button>
+          <input type="date" id="startDate" class="form-control">
+          <button id="btnNextWeek" class="btn btn-secondary btn-sm" title="Next Week">&rarr;</button>
+        </div>
+      </div>
+
+      <div class="demo-controls">
+        <button id="btnDemoShuvo" class="btn btn-secondary btn-sm" title="Load sample week with Half Day Leave">
+          Demo: Half-Day
+        </button>
+        <button id="btnDemoRony" class="btn btn-secondary btn-sm" title="Load sample week with Calibration & Meeting">
+          Demo: Meetings
+        </button>
+      </div>
+    </section>
+
+    <!-- Inline Sync Feedback Banner -->
+    <div id="syncFeedback" class="sync-feedback" role="status" aria-live="polite">
+      <span id="syncFeedbackText"></span>
+      <button type="button" id="btnDismissFeedback" class="btn btn-ghost btn-sm" style="padding: 2px 6px;">&times;</button>
+    </div>
+
+    <!-- 5-Day Selector Strip -->
+    <nav id="dayStrip" class="day-strip" aria-label="Days of the week"></nav>
+
+    <!-- Focused Active Day Workspace -->
+    <main id="activeDayWorkspace" class="workspace-card"></main>
+
+    <!-- Collapsible Live Spreadsheet Preview -->
+    <section class="preview-section">
+      <div id="previewToggleBar" class="preview-toggle-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <strong style="font-size: 14px;">Live Excel Preview</strong>
+          <span class="pill pill-normal"><span id="rowCountBadge">0</span> rows</span>
+          <span style="font-size: 12px; color: var(--text-muted);">19-column SD Data + Sheet2</span>
+        </div>
+        <span id="previewChevron" style="font-size: 13px; color: var(--kinpaku-gold); font-weight: 600;">
+          Show Preview &#9662;
+        </span>
+      </div>
+      <div id="previewBody" class="preview-body">
+        <div class="table-responsive">
+          <table class="preview-table">
+            <thead>
+              <tr id="previewTableHead"></tr>
+            </thead>
+            <tbody id="previewTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Local ExcelJS engine -->
+  <script src="lib/exceljs.min.js"></script>
+  <!-- Application logic (classic scripts so file:// works without CORS) -->
+  <script src="js/presets.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/importer.js"></script>
+  <script src="js/sheets-sync.js"></script>
+  <script src="js/exporter.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

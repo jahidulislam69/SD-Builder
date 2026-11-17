@@ -1,0 +1,12 @@
+{
+  "name": "sd-report-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SD Daily QA Report Generator web app",
+  "scripts": {
+    "test": "node test-verify.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
